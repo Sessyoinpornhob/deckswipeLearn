@@ -12,10 +12,16 @@ namespace DeckSwipe.World {
 		public TextMeshProUGUI daysSurvivedText;
 		
 		private void Awake() {
-			if (!Util.IsPrefab(gameObject)) {
+			// 如果该对象不是预制体，则将该对象添加到更改监听器列表中，并重置天数计数器。
+			/*if (!Util.IsPrefab(gameObject)) {
+				//Debug.Log(gameObject.name);
 				_changeListeners.Add(this);
 				SetDisplay(0);
-			}
+			}*/
+			
+			// m_脚本测试
+			_changeListeners.Add(this);
+			SetDisplay(0);
 		}
 		
 		public static void SetDaysSurvived(int days) {
@@ -23,6 +29,7 @@ namespace DeckSwipe.World {
 		}
 		
 		private static void SetAllDisplays(int days) {
+			// 遍历更改监听器列表中的所有显示器，并调用SetDisplay函数设置它们的天数计数器。
 			for (int i = 0; i < _changeListeners.Count; i++) {
 				if (_changeListeners[i] == null) {
 					_changeListeners.RemoveAt(i);
@@ -34,6 +41,7 @@ namespace DeckSwipe.World {
 		}
 		
 		private void SetDisplay(int days) {
+			// 设置单个显示器的天数计数器。
 			daysSurvivedText.text = days.ToString();
 		}
 		

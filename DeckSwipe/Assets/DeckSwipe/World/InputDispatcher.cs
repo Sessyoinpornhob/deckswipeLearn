@@ -9,8 +9,8 @@ namespace DeckSwipe.World {
 
 	public class InputDispatcher : MonoBehaviour {
 
-		private readonly KeyHandlerMap keyDownHandlers = new KeyHandlerMap();
-		private readonly KeyHandlerMap keyUpHandlers = new KeyHandlerMap();
+		public readonly KeyHandlerMap keyDownHandlers = new KeyHandlerMap();
+		public readonly KeyHandlerMap keyUpHandlers = new KeyHandlerMap();
 
 		private void Update() {
 			// Scan registered key inputs and invoke handlers

@@ -7,6 +7,7 @@ namespace Outfrost {
 	
 	public delegate void Callback();
 	
+	// 感觉像是一些基础指令的封装
 	public static class Util {
 		
 		public static bool IsPrefab(GameObject gameObject) {

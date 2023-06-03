@@ -7,6 +7,7 @@ namespace DeckSwipe.World {
 
 	public class CardBehaviour : MonoBehaviour {
 
+		// 动画状态机定义。
 		private enum AnimationState {
 
 			Idle,
@@ -37,6 +38,7 @@ namespace DeckSwipe.World {
 		private AnimationState animationState = AnimationState.Idle;
 		private bool animationSuspended;
 
+		// 构造函数，设置card的各种东西。
 		public ICard Card {
 			set {
 				card = value;
@@ -58,6 +60,7 @@ namespace DeckSwipe.World {
 
 		public Game Controller { private get; set; }
 
+		// 初始化了一些变量，并设置了左右滑动的文本透明度为0。
 		private void Awake() {
 			ShowVisibleSide();
 
@@ -65,6 +68,7 @@ namespace DeckSwipe.World {
 			Util.SetTextAlpha(rightActionText, 0.0f);
 		}
 
+		// 它设置了卡片的初始位置和旋转角度，并调用了CardShown()函数。
 		private void Start() {
 			// Rotate clockwise on reveal instead of anticlockwise
 			snapRotationAngles.y += 360.0f;
@@ -77,11 +81,13 @@ namespace DeckSwipe.World {
 			card.CardShown(Controller);
 		}
 
+		// 它根据卡片的状态进行动画，并根据卡片的位置设置左右滑动的文本透明度。
 		private void Update() {
 			// Animate card by interpolating translation and rotation, destroy swiped cards
 			if (animationState != AnimationState.Idle && !animationSuspended) {
 				float animationProgress = (Time.time - animationStartTime) / _animationDuration;
 				float scaledProgress = ScaleProgress(animationProgress);
+
 				if (scaledProgress > 1.0f || animationProgress > 1.0f) {
 					transform.position = snapPosition;
 					transform.eulerAngles = snapRotationAngles;
@@ -112,12 +118,14 @@ namespace DeckSwipe.World {
 			}
 		}
 
+		// 这个函数在拖动卡片时被调用。它暂停了卡片的动画，并记录了拖动的起始位置
 		public void BeginDrag() {
 			animationSuspended = true;
 			dragStartPosition = transform.position;
 			dragStartPointerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		}
 
+		// 这个函数在拖动卡片时被调用。它根据鼠标的位置移动卡片，并根据卡片的位置设置左右滑动的文本透明度。
 		public void Drag() {
 			Vector3 displacement = Camera.main.ScreenToWorldPoint(Input.mousePosition) - dragStartPointerPosition;
 			displacement.z = 0.0f;
@@ -128,6 +136,7 @@ namespace DeckSwipe.World {
 			Util.SetTextAlpha(rightActionText, alphaCoord);
 		}
 
+		// 这个函数在拖动卡片结束时被调用。它记录了卡片的位置和旋转角度，并根据卡片的位置执行相应的操作。
 		public void EndDrag() {
 			animationStartPosition = transform.position;
 			animationStartRotationAngles = transform.eulerAngles;
@@ -160,6 +169,9 @@ namespace DeckSwipe.World {
 			animationSuspended = false;
 		}
 
+		// ShowVisibleSide()函数是用来根据卡片是否面向主摄像机来显示正确的卡片元素的。
+		// 如果卡片面向主摄像机，则显示卡片的正面元素，否则显示卡片的背面元素。
+		// 具体来说，它会根据卡片的状态来设置cardBackSpriteRenderer、cardFrontSpriteRenderer、cardImageSpriteRenderer、leftActionText和rightActionText的可见性。
 		private void ShowVisibleSide() {
 			// Display correct card elements based on whether it's facing the main camera
 			bool isFacingCamera = Util.IsFacingCamera(gameObject);
@@ -170,6 +182,9 @@ namespace DeckSwipe.World {
 			rightActionText.enabled = isFacingCamera;
 		}
 
+		// ScaleProgress()函数是用来计算动画进度的。
+		// 它接受一个动画进度参数，并返回一个经过缩放的动画进度。
+		// 具体来说，它会根据动画的状态来计算缩放后的动画进度，并返回结果。
 		private float ScaleProgress(float animationProgress) {
 			switch (animationState) {
 				case AnimationState.Converging:
