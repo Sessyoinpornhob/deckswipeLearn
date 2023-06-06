@@ -22,6 +22,7 @@ namespace DeckSwipe.CardModel.Import {
 			this.remoteCollectionFirst = remoteCollectionFirst;
 		}
 
+		// 这个b函数这么长？
 		public async Task<ImportedCards> Import() {
 			ProtoCollection collection;
 			if (remoteCollectionFirst) {

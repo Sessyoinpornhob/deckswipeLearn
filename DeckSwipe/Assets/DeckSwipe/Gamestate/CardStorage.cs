@@ -16,13 +16,17 @@ namespace DeckSwipe.Gamestate {
 		private readonly Sprite defaultSprite;
 		private readonly bool loadRemoteCollectionFirst;
 
+		// 存储所有的卡片对象
 		public Dictionary<int, Card> Cards { get; private set; }
+		// 存储所有的特殊卡片对象
 		public Dictionary<string, SpecialCard> SpecialCards { get; private set; }
 
+		// 异步加载卡片集合
 		public Task CardCollectionImport { get; }
 
 		private List<Card> drawableCards = new List<Card>();
 
+		// 构造函数
 		public CardStorage(Sprite defaultSprite, bool loadRemoteCollectionFirst) {
 			this.defaultSprite = defaultSprite;
 			this.loadRemoteCollectionFirst = loadRemoteCollectionFirst;
@@ -33,6 +37,7 @@ namespace DeckSwipe.Gamestate {
 			return drawableCards[UnityEngine.Random.Range(0, drawableCards.Count)];
 		}
 
+		// 通过ID找卡片
 		public Card ForId(int id) {
 			Card card;
 			Cards.TryGetValue(id, out card);
@@ -45,6 +50,7 @@ namespace DeckSwipe.Gamestate {
 			return card;
 		}
 
+		// 解析卡片的前置条件
 		public void ResolvePrerequisites() {
 			foreach (Card card in Cards.Values) {
 				card.ResolvePrerequisites(this);
@@ -54,11 +60,15 @@ namespace DeckSwipe.Gamestate {
 			}
 		}
 
+		// 将卡片添加到可绘制卡片列表中
 		public void AddDrawableCard(Card card) {
 			drawableCards.Add(card);
 		}
 
+
 		private async Task PopulateCollection() {
+			// 由于 Import 函数是一个异步函数，因此在调用它时需要使用 await 关键字
+			// 在 CollectionImporter.Import() 完成后返回ImportedCards值
 			ImportedCards importedCards =
 					await new CollectionImporter(defaultSprite, loadRemoteCollectionFirst).Import();
 			Cards = importedCards.cards;
@@ -69,6 +79,7 @@ namespace DeckSwipe.Gamestate {
 			VerifySpecialCards();
 		}
 
+		// 在卡片集合加载失败时添加一些占位卡片
 		private void PopulateFallback() {
 			Cards = new Dictionary<int, Card>();
 			Character placeholderPerson = new Character("Placeholder Person", defaultSprite);
@@ -95,6 +106,7 @@ namespace DeckSwipe.Gamestate {
 					new List<ICardPrerequisite>()));
 		}
 
+		// 用于验证特殊卡片是否存在：验证死亡卡片是否存在。
 		private void VerifySpecialCards() {
 			if (SpecialCards == null) {
 				SpecialCards = new Dictionary<string, SpecialCard>();

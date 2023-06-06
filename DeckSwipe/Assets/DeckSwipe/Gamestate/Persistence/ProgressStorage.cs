@@ -6,6 +6,7 @@ namespace DeckSwipe.Gamestate.Persistence {
 	
 	public class ProgressStorage {
 		
+		// 存储游戏进度信息的文件路径 可以在debug.log中看到。
 		private static readonly string _gameProgressPath = Application.persistentDataPath + "/progress.json";
 		
 		private readonly CardStorage cardStorage;
@@ -18,10 +19,12 @@ namespace DeckSwipe.Gamestate.Persistence {
 			ProgressStorageInit = Load();
 		}
 		
+		// 存档方法
 		public void Save() {
 			SaveLocally();
 		}
 		
+		// SaveLocally 方法会将游戏进度信息转换为 JSON 格式，并将其写入到本地文件中。
 		private async void SaveLocally() {
 			string progressJson = JsonUtility.ToJson(Progress);
 			using (FileStream fileStream = File.Create(_gameProgressPath)) {
@@ -32,6 +35,7 @@ namespace DeckSwipe.Gamestate.Persistence {
 			}
 		}
 		
+		// 读档方法
 		private async Task Load() {
 			Progress = await LoadLocally();
 			await cardStorage.CardCollectionImport;

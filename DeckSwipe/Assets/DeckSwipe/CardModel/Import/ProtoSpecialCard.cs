@@ -15,7 +15,7 @@ namespace DeckSwipe.CardModel.Import {
 
 		public ProtoSpecialCard() {}
 
-		public ProtoSpecialCard(
+		/*public ProtoSpecialCard(
 				string id,
 				int characterId,
 				string cardText,
@@ -26,7 +26,7 @@ namespace DeckSwipe.CardModel.Import {
 			this.cardText = cardText;
 			this.leftAction = leftAction;
 			this.rightAction = rightAction;
-		}
+		}*/
 
 		public ProtoSpecialCard(
 				string id,

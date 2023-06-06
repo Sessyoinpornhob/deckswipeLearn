@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DeckSwipe.Gamestate {
 	
+	// 存储游戏统计信息
 	public static class Stats {
 		
 		private const int _maxStatValue = 32;
@@ -13,6 +14,7 @@ namespace DeckSwipe.Gamestate {
 		private const int _startingHealth = 16;
 		private const int _startingHope = 16;
 		
+		// 写的是readonly 但实际上可以随便改。
 		private static readonly List<StatsDisplay> _changeListeners = new List<StatsDisplay>();
 		
 		public static int Coal { get; private set; }
@@ -25,6 +27,8 @@ namespace DeckSwipe.Gamestate {
 		public static float HealthPercentage => (float) Health / _maxStatValue;
 		public static float HopePercentage => (float) Hope / _maxStatValue;
 		
+		// 用于应用修改
+		// 根据传入的 StatsModification 对象修改煤炭、食物、健康和希望的值，并触发所有的监听器
 		public static void ApplyModification(StatsModification mod) {
 			Coal = ClampValue(Coal + mod.coal);
 			Food = ClampValue(Food + mod.food);
@@ -33,6 +37,7 @@ namespace DeckSwipe.Gamestate {
 			TriggerAllListeners();
 		}
 		
+		// 重置所有统计信息
 		public static void ResetStats() {
 			ApplyStartingValues();
 			TriggerAllListeners();
@@ -45,6 +50,7 @@ namespace DeckSwipe.Gamestate {
 			Hope = ClampValue(_startingHope);
 		}
 		
+		// 触发所有的监听器
 		private static void TriggerAllListeners() {
 			for (int i = 0; i < _changeListeners.Count; i++) {
 				if (_changeListeners[i] == null) {

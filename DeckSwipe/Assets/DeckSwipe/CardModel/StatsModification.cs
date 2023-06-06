@@ -3,6 +3,7 @@ using System;
 
 namespace DeckSwipe.CardModel {
 
+	// 状态更新。
 	[Serializable]
 	public class StatsModification {
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DeckSwipe.CardModel {
 
+	// 特殊卡牌类和普通的卡牌类几乎没有区别。
 	public class SpecialCard : ICard {
 
 		public string CardText { get; }

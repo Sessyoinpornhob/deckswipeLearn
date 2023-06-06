@@ -19,10 +19,12 @@ namespace DeckSwipe.CardModel.DrawQueue {
 			this.delay = delay;
 		}
 
+		// 创建一个新的 Followup
 		public IFollowup Clone() {
 			return new Followup(id, delay);
 		}
 
+		// 获取后续卡片
 		public ICard Fetch(CardStorage cardStorage) {
 			return cardStorage.ForId(id);
 		}

@@ -33,6 +33,7 @@ namespace DeckSwipe.CardModel {
 		private Dictionary<ICard, ICardPrerequisite> unsatisfiedPrerequisites;
 		private List<Card> dependentCards = new List<Card>();
 
+		// 构造函数
 		public Card(
 				string cardText,
 				string leftSwipeText,
@@ -49,7 +50,10 @@ namespace DeckSwipe.CardModel {
 			rightSwipeOutcome = rightOutcome;
 			this.prerequisites = prerequisites;
 		}
+		
+		// 下面是一些方法的重载。
 
+		// CardShown 方法用于标记卡片已经显示
 		public void CardShown(Game controller) {
 			progress.Status |= CardStatus.CardShown;
 			foreach (Card card in dependentCards) {
@@ -57,6 +61,7 @@ namespace DeckSwipe.CardModel {
 			}
 		}
 
+		// PerformLeftDecision 方法用于执行左滑操作
 		public void PerformLeftDecision(Game controller) {
 			progress.Status |= CardStatus.LeftActionTaken;
 			foreach (Card card in dependentCards) {
@@ -65,6 +70,7 @@ namespace DeckSwipe.CardModel {
 			leftSwipeOutcome.Perform(controller);
 		}
 
+		// PerformRightDecision 方法用于执行右滑操作。
 		public void PerformRightDecision(Game controller) {
 			progress.Status |= CardStatus.RightActionTaken;
 			foreach (Card card in dependentCards) {
@@ -73,6 +79,7 @@ namespace DeckSwipe.CardModel {
 			rightSwipeOutcome.Perform(controller);
 		}
 
+		// CheckPrerequisite 方法用于检查卡片的前置条件是否满足。
 		public void CheckPrerequisite(ICard dependency, CardStorage cardStorage) {
 			if (PrerequisitesSatisfied()
 					|| !unsatisfiedPrerequisites.ContainsKey(dependency)) {
@@ -93,6 +100,7 @@ namespace DeckSwipe.CardModel {
 			}
 		}
 
+		// 解决卡片的前置条件
 		public void ResolvePrerequisites(CardStorage cardStorage) {
 			unsatisfiedPrerequisites = new Dictionary<ICard, ICardPrerequisite>();
 			foreach (ICardPrerequisite prerequisite in prerequisites) {
@@ -106,6 +114,7 @@ namespace DeckSwipe.CardModel {
 			}
 		}
 
+		// 添加和删除依赖于该卡片的卡牌。
 		public void AddDependentCard(Card card) {
 			dependentCards.Add(card);
 		}
